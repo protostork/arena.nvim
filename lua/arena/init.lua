@@ -39,6 +39,13 @@ local DEFAULT_KEYMAPS = {
     })
     vim.fn.cursor(info.lnum, 0)
   end,
+  ["<u>"] = function(win)
+    local current = win:current()
+    -- win:close()
+    local info = vim.fn.getbufinfo(current.bufnr)[1]
+    vim.api.nvim_set_current_buf(current.bufnr)
+    vim.fn.cursor(info.lnum, 0)
+  end,
   ["<CR>"] = function(win)
     local current = win:current()
     win:close()
@@ -202,7 +209,8 @@ function M.setup(opts)
       config[k] = v
     end
   end
-  M.window.keymaps = vim.tbl_deep_extend("force", DEFAULT_KEYMAPS, config.keybinds)
+  M.window.keymaps =
+    vim.tbl_deep_extend("force", DEFAULT_KEYMAPS, config.keybinds)
   frecency.tune(config.algorithm)
 end
 
